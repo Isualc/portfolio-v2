@@ -1,0 +1,190 @@
+---
+interface ImageItem {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+interface Props {
+  images: ImageItem[];
+  autoplay?: boolean;
+  interval?: number;      // ms
+  aspectRatio?: string;   // e.g. "16/10"
+  showCaption?: boolean;
+  ariaLabel?: string;
+  lang?: "de" | "en";
+}
+const {
+  images,
+  autoplay = true,
+  interval = 5500,
+  aspectRatio = "16/10",
+  showCaption = true,
+  ariaLabel,
+  lang = "de",
+} = Astro.props;
+
+const labels = {
+  de: { prev: "Vorheriges Bild", next: "Nächstes Bild", slideN: "Bild", play: "Abspielen", pause: "Pausieren" },
+  en: { prev: "Previous slide",  next: "Next slide",   slideN: "Slide", play: "Play",        pause: "Pause" },
+}[lang];
+---
+
+<div
+  class="carousel"
+  role="region"
+  aria-roledescription="carousel"
+  aria-label={ariaLabel ?? "Bildkarussell"}
+  data-autoplay={autoplay ? "true" : "false"}
+  data-interval={interval}
+  style={`--carousel-ratio: ${aspectRatio};`}
+>
+  <div class="carousel-viewport" aria-live="polite">
+    {images.map((img, i) => (
+      <figure
+        class:list={["carousel-slide", i === 0 && "is-active"]}
+        data-index={i}
+        aria-hidden={i === 0 ? "false" : "true"}
+        role="group"
+        aria-roledescription="slide"
+        aria-label={`${labels.slideN} ${i + 1} / ${images.length}`}
+      >
+        <img
+          src={img.src}
+          alt={img.alt}
+          loading={i === 0 ? "eager" : "lazy"}
+          fetchpriority={i === 0 ? "high" : "low"}
+          decoding="async"
+        />
+        {showCaption && img.caption && (
+          <figcaption>{img.caption}</figcaption>
+        )}
+      </figure>
+    ))}
+  </div>
+
+  <div class="carousel-controls" aria-label="Karussell-Steuerung">
+    <button type="button" class="carousel-arrow carousel-prev" aria-label={labels.prev}>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+        <path d="M15 6l-6 6 6 6"/>
+      </svg>
+    </button>
+
+    <div class="carousel-dots" role="tablist" aria-label="Bild auswählen">
+      {images.map((_, i) => (
+        <button
+          type="button"
+          class:list={["carousel-dot", i === 0 && "is-active"]}
+          data-index={i}
+          role="tab"
+          aria-selected={i === 0 ? "true" : "false"}
+          aria-label={`${labels.slideN} ${i + 1}`}
+          tabindex={i === 0 ? 0 : -1}
+        ></button>
+      ))}
+    </div>
+
+    <button type="button" class="carousel-arrow carousel-next" aria-label={labels.next}>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+        <path d="M9 6l6 6-6 6"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  (() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    document.querySelectorAll<HTMLElement>(".carousel").forEach((root) => {
+      const slides = Array.from(root.querySelectorAll<HTMLElement>(".carousel-slide"));
+      const dots   = Array.from(root.querySelectorAll<HTMLButtonElement>(".carousel-dot"));
+      const prev   = root.querySelector<HTMLButtonElement>(".carousel-prev");
+      const next   = root.querySelector<HTMLButtonElement>(".carousel-next");
+      if (slides.length < 2) return;
+
+      const autoplay = root.dataset.autoplay === "true" && !prefersReducedMotion;
+      const interval = parseInt(root.dataset.interval || "5000", 10);
+
+      let current = 0;
+      let timer: number | null = null;
+      let isHovered = false;
+
+      function show(i: number) {
+        const next = ((i % slides.length) + slides.length) % slides.length;
+        slides.forEach((s, si) => {
+          const active = si === next;
+          s.classList.toggle("is-active", active);
+          s.setAttribute("aria-hidden", active ? "false" : "true");
+        });
+        dots.forEach((d, di) => {
+          const active = di === next;
+          d.classList.toggle("is-active", active);
+          d.setAttribute("aria-selected", active ? "true" : "false");
+          d.tabIndex = active ? 0 : -1;
+        });
+        current = next;
+      }
+
+      function step(dir: 1 | -1) {
+        show(current + dir);
+        restart();
+      }
+
+      function restart() {
+        if (!autoplay) return;
+        stop();
+        if (!isHovered) {
+          timer = window.setInterval(() => show(current + 1), interval);
+        }
+      }
+
+      function stop() {
+        if (timer !== null) { window.clearInterval(timer); timer = null; }
+      }
+
+      // Controls
+      prev?.addEventListener("click", () => step(-1));
+      next?.addEventListener("click", () => step(1));
+      dots.forEach((d) => {
+        d.addEventListener("click", () => {
+          const i = parseInt(d.dataset.index || "0", 10);
+          show(i); restart();
+        });
+      });
+
+      // Pause on hover / focus inside
+      root.addEventListener("pointerenter", () => { isHovered = true; stop(); });
+      root.addEventListener("pointerleave", () => { isHovered = false; restart(); });
+      root.addEventListener("focusin",       () => { isHovered = true; stop(); });
+      root.addEventListener("focusout", (e) => {
+        if (!root.contains(e.relatedTarget as Node)) {
+          isHovered = false; restart();
+        }
+      });
+
+      // Keyboard on dots
+      root.querySelector(".carousel-dots")?.addEventListener("keydown", (ev) => {
+        const e = ev as KeyboardEvent;
+        if (e.key === "ArrowLeft")  { e.preventDefault(); step(-1); dots[current]?.focus(); }
+        if (e.key === "ArrowRight") { e.preventDefault(); step(1);  dots[current]?.focus(); }
+        if (e.key === "Home")       { e.preventDefault(); show(0);                  restart(); dots[0]?.focus(); }
+        if (e.key === "End")        { e.preventDefault(); show(slides.length - 1);  restart(); dots[slides.length - 1]?.focus(); }
+      });
+
+      // Touch swipe
+      let touchStartX = 0;
+      root.addEventListener("touchstart", (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+      root.addEventListener("touchend",   (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+      });
+
+      // Pause when tab is hidden
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) stop(); else restart();
+      });
+
+      restart();
+    });
+  })();
+</script>

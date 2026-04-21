@@ -1,0 +1,20 @@
+---
+interface Props { lang?: "de" | "en"; }
+const { lang = "de" } = Astro.props;
+
+const items = {
+  de: ["100 % Offline", "DSGVO by Design", "Made in Austria", "Validation nach Feil", "Reisberg GDS/FAST"],
+  en: ["100 % Offline", "GDPR by Design",  "Made in Austria", "Feil's Validation",    "Reisberg GDS/FAST"],
+}[lang];
+---
+
+<section class="trust" aria-label="Vertrauensmerkmale">
+  <div class="container trust-inner">
+    {items.map((item, i) => (
+      <>
+        <span>{item}</span>
+        {i < items.length - 1 && <span class="sep" aria-hidden="true">·</span>}
+      </>
+    ))}
+  </div>
+</section>

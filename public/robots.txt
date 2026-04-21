@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Kein Sitemap-Link bis Domain geklärt ist.
+# Nach Custom-Domain-Setup hier eintragen:
+# Sitemap: https://<deine-domain>/sitemap-index.xml

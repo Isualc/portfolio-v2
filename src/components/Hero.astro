@@ -1,0 +1,75 @@
+---
+import { getCollection } from "astro:content";
+import Carousel from "./Carousel.astro";
+
+interface Props {
+  lang?: "de" | "en";
+}
+const { lang = "de" } = Astro.props;
+
+// KIPP-Bildkarussell aus Content Collection
+const kipp = (await getCollection("projects")).find((p) => p.id === "kipp");
+const kippImages = kipp?.data.gallery ?? [];
+
+const t = {
+  de: {
+    eyebrow: "Portfolio · Claus Hierzer",
+    h1a: "KI, die",
+    h1b: "Pflege achtet.",
+    h1c: "Gebaut von der Station.",
+    lead: "Ich bin Claus Hierzer — Entwickler, nach 15 Jahren in der Pflege. Ich baue KI-Anwendungen, die im Stationsalltag wirklich helfen. KIPP ist mein Hauptprojekt.",
+    primary: "Projekte ansehen",
+    secondary: "Kontakt",
+    caption: "KIPP · offline auf Tablet",
+  },
+  en: {
+    eyebrow: "Portfolio · Claus Hierzer",
+    h1a: "AI that respects",
+    h1b: "caregiving.",
+    h1c: "Built at the bedside.",
+    lead: "I'm Claus Hierzer — developer, after 15 years in nursing. I build AI tools that actually help at the bedside. KIPP is my main project.",
+    primary: "See projects",
+    secondary: "Contact",
+    caption: "KIPP · offline on tablet",
+  },
+}[lang];
+---
+
+<section class="hero" aria-labelledby="hero-h1">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="hero-eyebrow">{t.eyebrow}</p>
+      <h1 id="hero-h1">
+        {t.h1a} <em>{t.h1b}</em><br />
+        {t.h1c}
+      </h1>
+      <p class="hero-lead">{t.lead}</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#projekte">
+          {t.primary}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </a>
+        <a class="btn btn-ghost" href="#kontakt">{t.secondary}</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      {kippImages.length > 0 ? (
+        <Carousel
+          images={kippImages}
+          autoplay={true}
+          interval={5500}
+          aspectRatio="16/10"
+          showCaption={false}
+          ariaLabel="KIPP · Produktbilder"
+          lang={lang}
+        />
+      ) : (
+        <div class="placeholder"><strong>KIPP</strong>Hero-Visual</div>
+      )}
+      <div class="hero-visual-caption">{t.caption}</div>
+    </div>
+  </div>
+</section>

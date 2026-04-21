@@ -1,0 +1,86 @@
+---
+interface Props { lang?: "de" | "en"; }
+const { lang = "de" } = Astro.props;
+
+// Basis-URL je Sprache — Anker zeigen absolut auf die Startseite.
+const base = lang === "de" ? "/" : "/en/";
+
+const t = {
+  de: {
+    tag: "Portfolio · Steiermark",
+    desc: "Portfolio und Projekte. Entwickler, nach 15 Jahren in der Pflege.",
+    hProj: "Projekte",
+    hNav: "Navigation",
+    nav: [
+      { label: "Über mich", href: `${base}#ueber` },
+      { label: "Kontakt",   href: `${base}#kontakt` },
+      { label: "Impressum", href: "#" },
+      { label: "Datenschutz", href: "#" },
+    ],
+    projects: [
+      { label: "KIPP",         href: "/projekte/kipp/" },
+      { label: "ISU Agent",    href: "/projekte/isu-agent/" },
+      { label: "Förderpilot",  href: "/projekte/foerderpilot/" },
+      { label: "Alle ansehen", href: `${base}#projekte` },
+    ],
+    copy: "© 2026 Claus Hierzer",
+    build: "Steiermark · Österreich",
+  },
+  en: {
+    tag: "Portfolio · Styria",
+    desc: "Portfolio and projects. Developer, after 15 years in nursing.",
+    hProj: "Projects",
+    hNav: "Navigation",
+    nav: [
+      { label: "About me", href: `${base}#ueber` },
+      { label: "Contact",  href: `${base}#kontakt` },
+      { label: "Imprint",  href: "#" },
+      { label: "Privacy",  href: "#" },
+    ],
+    projects: [
+      { label: "KIPP",        href: "/projekte/kipp/" },
+      { label: "ISU Agent",   href: "/projekte/isu-agent/" },
+      { label: "Förderpilot", href: "/projekte/foerderpilot/" },
+      { label: "See all",     href: `${base}#projekte` },
+    ],
+    copy: "© 2026 Claus Hierzer",
+    build: "Styria · Austria",
+  },
+}[lang];
+---
+
+<footer role="contentinfo">
+  <div class="container">
+    <div class="foot">
+      <div>
+        <div class="brand" style="margin-bottom: var(--s-4);">
+          <span class="logo" aria-hidden="true"></span>
+          <span class="brand-text">
+            <span class="t">Claus Hierzer</span>
+            <span class="s">{t.tag}</span>
+          </span>
+        </div>
+        <p style="max-width: 40ch; margin: 0;">{t.desc}</p>
+      </div>
+
+      <div>
+        <h5>{t.hProj}</h5>
+        <ul>
+          {t.projects.map(p => <li><a href={p.href}>{p.label}</a></li>)}
+        </ul>
+      </div>
+
+      <div>
+        <h5>{t.hNav}</h5>
+        <ul>
+          {t.nav.map(n => <li><a href={n.href}>{n.label}</a></li>)}
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <div>{t.copy}</div>
+      <div>{t.build} · Build {new Date().toISOString().slice(0, 10)}</div>
+    </div>
+  </div>
+</footer>

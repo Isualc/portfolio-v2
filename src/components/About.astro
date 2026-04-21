@@ -1,0 +1,69 @@
+---
+interface Props { lang?: "de" | "en"; }
+const { lang = "de" } = Astro.props;
+
+const t = {
+  de: {
+    kicker: "Über mich",
+    headA: "Pflege verstehen.",
+    headB: "Software bauen.",
+    role1: "Entwickler",
+    name1: "Claus Hierzer",
+    p1a: "Pflegehelfer mit Auszeichnung, 2005. Fünfzehn Jahre in Pflegeeinrichtungen, davon acht in der Demenzpflege. Die Laufbahn endete mit einem Bandscheibenvorfall — nicht mit Erschöpfung der Berufung.",
+    p1b: "Den Umstieg in die Softwareentwicklung habe ich im Juli 2024 bei CodersBay Kapfenberg begonnen. Die Lehrabschlussprüfung habe ich bewusst verschoben, um mich auf den Aufbau von Isualc AI Solutions zu konzentrieren. Über alle Projekte und Versionen inzwischen rund eine Million Zeilen Flutter, Dart und Python, davon mehrere Hunderttausend allein für KIPP. Die doppelte Perspektive — medizinische Fachkraft und Software-Entwickler — ist das, was die Projekte hier trägt.",
+    list1: [
+      "15 Jahre Pflege · 8 Jahre Demenzpflege",
+      "Flutter · Dart · Python · Android · Windows",
+      "Offline-AI mit Gemma 4 E2B, llama.cpp, MediaPipe",
+    ],
+    role2: "Arbeitsrahmen",
+    name2: "Isualc AI Solutions",
+    p2: "Arbeitstitel für den Rahmen, unter dem ich KIPP und die verwandten Werkzeuge weiterentwickle. Sitz Steiermark. Mehr dazu, wenn etwas dranhängt.",
+  },
+  en: {
+    kicker: "About me",
+    headA: "Understand care.",
+    headB: "Build software.",
+    role1: "Developer",
+    name1: "Claus Hierzer",
+    p1a: "Certified nursing assistant since 2005. Fifteen years in care facilities, eight of them in dementia care. The career ended with a herniated disc — not with burnout of vocation.",
+    p1b: "I moved into software engineering in July 2024 at CodersBay Kapfenberg. I've deliberately postponed the final apprenticeship exam to focus on building Isualc AI Solutions. Across all projects and versions now roughly one million lines of Flutter, Dart and Python, several hundred thousand of them for KIPP alone. The dual perspective — medical professional and software engineer — is what carries the projects here.",
+    list1: [
+      "15 years of caregiving · 8 years in dementia care",
+      "Flutter · Dart · Python · Android · Windows",
+      "Offline AI with Gemma 4 E2B, llama.cpp, MediaPipe",
+    ],
+    role2: "Working frame",
+    name2: "Isualc AI Solutions",
+    p2: "Working title for the frame under which I continue to develop KIPP and related tools. Based in Styria. More on this when something hangs on it.",
+  },
+}[lang];
+---
+
+<section class="section" id="ueber" aria-labelledby="about-head">
+  <div class="container">
+    <div class="section-head">
+      <p class="k">{t.kicker}</p>
+      <h2 id="about-head">{t.headA} <em>{t.headB}</em></h2>
+    </div>
+
+    <div class="about-grid">
+      <article class="about-card primary">
+        <div class="portrait" aria-hidden="true"></div>
+        <div class="role">{t.role1}</div>
+        <h3>{t.name1}</h3>
+        <p>{t.p1a}</p>
+        <p>{t.p1b}</p>
+        <ul>
+          {t.list1.map(item => <li>{item}</li>)}
+        </ul>
+      </article>
+
+      <aside class="about-card" style="align-self: start;">
+        <div class="role">{t.role2}</div>
+        <h3>{t.name2}</h3>
+        <p style="font-size: .94rem;">{t.p2}</p>
+      </aside>
+    </div>
+  </div>
+</section>

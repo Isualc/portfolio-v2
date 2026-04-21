@@ -1,0 +1,137 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import Gallery from "../../components/Gallery.astro";
+import Carousel from "../../components/Carousel.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map(p => ({
+    params: { slug: p.id },
+    props: { project: p },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const data = project.data;
+const hasGallery = data.gallery && data.gallery.length > 0;
+---
+
+<Base
+  lang="de"
+  title={`${data.title} — Claus Hierzer`}
+  description={data.description}
+>
+  <Nav lang="de" />
+
+  <main id="main" class="project-page">
+
+    <!-- Back link -->
+    <nav class="crumb" aria-label="Zurück">
+      <div class="container">
+        <a href="/#projekte">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <path d="M19 12H5M11 6l-6 6 6 6"/>
+          </svg>
+          Zurück zu allen Projekten
+        </a>
+      </div>
+    </nav>
+
+    <!-- Hero carousel (nur wenn Bilder vorhanden) -->
+    {hasGallery && (
+      <section class="project-hero" aria-label="Projekt-Vorschau">
+        <div class="container">
+          <Carousel
+            images={data.gallery}
+            autoplay={true}
+            interval={6000}
+            aspectRatio="16/10"
+            showCaption={false}
+            ariaLabel={`${data.title} · Produktbilder`}
+            lang="de"
+          />
+        </div>
+      </section>
+    )}
+
+    <!-- Project header -->
+    <header class="project-head">
+      <div class="container">
+        <p class="project-num">{data.num === "—" ? "Hauptprojekt" : `/ ${data.num}`}</p>
+        <h1 class="project-title" set:html={data.titleHtml || data.title}></h1>
+        <p class="project-tagline">{data.tagline}</p>
+
+        <dl class="project-meta" aria-label="Projekt-Metadaten">
+          <div class="meta-item">
+            <dt>Status</dt>
+            <dd>{data.status}</dd>
+          </div>
+          {data.version && (
+            <div class="meta-item">
+              <dt>Version</dt>
+              <dd>{data.version}</dd>
+            </div>
+          )}
+          <div class="meta-item">
+            <dt>Plattform</dt>
+            <dd>{data.platforms.join(" · ")}</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Stack</dt>
+            <dd>{data.tech.join(" · ")}</dd>
+          </div>
+        </dl>
+      </div>
+    </header>
+
+    <!-- Highlights -->
+    {data.highlights && data.highlights.length > 0 && (
+      <section class="project-highlights" aria-labelledby="hl-head">
+        <div class="container">
+          <h2 id="hl-head" class="sr-only">Highlights</h2>
+          <ul>
+            {data.highlights.map(h => (
+              <li>
+                <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                  <path d="M20 6 9 17l-5-5"/>
+                </svg>
+                <span>{h}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    <!-- Gallery (detailed browsing with lightbox) -->
+    {hasGallery && (
+      <div class="container">
+        <Gallery images={data.gallery} title={data.title} lang="de" />
+      </div>
+    )}
+
+    <!-- Long-form content -->
+    <article class="project-body">
+      <div class="container">
+        <div class="prose">
+          <Content />
+        </div>
+      </div>
+    </article>
+
+    <!-- Footer CTA: back to projects + contact -->
+    <section class="project-cta">
+      <div class="container">
+        <a href="/#projekte" class="btn btn-ghost">Alle Projekte</a>
+        <a href="/#kontakt" class="btn btn-primary">Kontakt</a>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer lang="de" />
+</Base>

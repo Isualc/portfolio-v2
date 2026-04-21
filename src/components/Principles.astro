@@ -1,0 +1,51 @@
+---
+interface Props { lang?: "de" | "en"; }
+const { lang = "de" } = Astro.props;
+
+const t = {
+  de: {
+    kicker: "Wie ich arbeite",
+    headA: "Vier Dinge, die mir",
+    headB: "wichtig sind.",
+    sub: "Ich messe jede Entscheidung in Code und Produkt an diesen vier Punkten. Wenn etwas sie bricht, baue ich es nicht.",
+    p: [
+      { n: "I.",  h: "Menschlichkeit vor Technik",     t: `Validation nach Naomi Feil. Keine Realitätsorientierung, keine „W-Fragen" in späten Phasen. Gefühle werden ernst genommen — auch wenn Fakten nicht mehr stimmen.` },
+      { n: "II.", h: "Daten bleiben vor Ort",          t: `100 % Offline-Inferenz auf Edge-Hardware. Kein Upload, keine Server, kein Lock-in. DSGVO-Konformität entsteht durch Architektur, nicht durch Zusatz-Klauseln.` },
+      { n: "III.",h: "Leise Technik",                  t: `KIPP spricht ruhig, mit Pausen, ohne Emojis, ohne Markdown. Die Software tritt zurück — der Mensch ist die Hauptfigur.` },
+      { n: "IV.", h: "Eigene Erfahrung als Fundament", t: `Was ich baue, habe ich entweder selbst gebraucht oder bei jemandem gesehen, der es gebraucht hat. Das ist die einzige Rechtfertigung, die ich für ein Feature akzeptiere.` },
+    ],
+  },
+  en: {
+    kicker: "How I work",
+    headA: "Four things that",
+    headB: "matter to me.",
+    sub: "I measure every decision in code and product against these four points. If something breaks them, I don't ship it.",
+    p: [
+      { n: "I.",  h: "Humanity before tech",           t: `Validation by Naomi Feil. No reality orientation, no "W-questions" in later phases. Feelings are taken seriously — even when the facts no longer hold.` },
+      { n: "II.", h: "Data stays on-device",           t: `100 % offline inference on edge hardware. No upload, no server, no lock-in. GDPR compliance through architecture, not clauses.` },
+      { n: "III.",h: "Quiet technology",               t: `KIPP speaks calmly, with pauses, no emojis, no markdown. The software steps back — the human is the lead.` },
+      { n: "IV.", h: "Lived experience as foundation", t: `What I build I either needed myself or saw someone else need. That's the only justification I accept for a feature.` },
+    ],
+  },
+}[lang];
+---
+
+<section class="section" id="prinzipien" aria-labelledby="prinz-head">
+  <div class="container">
+    <div class="section-head">
+      <p class="k">{t.kicker}</p>
+      <h2 id="prinz-head">{t.headA} <em>{t.headB}</em></h2>
+      <p class="sub">{t.sub}</p>
+    </div>
+
+    <div class="principles">
+      {t.p.map(p => (
+        <article class="principle">
+          <span class="principle-n">{p.n}</span>
+          <h3>{p.h}</h3>
+          <p>{p.t}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

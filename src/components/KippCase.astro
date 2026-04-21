@@ -1,0 +1,102 @@
+---
+interface Props { lang?: "de" | "en"; }
+const { lang = "de" } = Astro.props;
+
+const t = {
+  de: {
+    label: "Hauptprojekt · v1.0.0 · April 2026",
+    headA: "Validation vor Realitäts\u00adorientierung.",
+    headB: "Immer.",
+    meta: { plattform: "Plattform", plattformVal: "Windows · Android", modell: "Modell", modellVal: "Gemma 4 E2B, lokal", sprachen: "Sprachen", sprachenVal: "15" },
+    p1: `KIPP begleitet Menschen mit Demenz — und nur sie. Keine Allzweck-KI, kein Chatbot. Das Gerät sagt: „Ich bin hier. Sie sind sicher. Erzählen Sie mir." Und dann hört es zu.`,
+    p2a: "Die theoretische Basis ist unsichtbar, aber präzise: ",
+    strongA: "Validation nach Naomi Feil",
+    p2b: " gibt den Umgang mit Gefühlen vor — sie sind immer wahr, auch wenn Fakten es nicht mehr sind. Das ",
+    strongB: "Retrogenese-Modell von Barry Reisberg",
+    p2c: " liefert die sieben Phasen und bestimmt, wie viele Worte pro Satz, welche Fragetypen, wie lang die Pausen sein dürfen.",
+    quote: "Gefühle sind immer wahr — auch wenn Fakten nicht mehr stimmen.",
+    cite: "— Kernregel, KIPP Prompt-Architektur",
+    p3a: "Technisch läuft KIPP vollständig auf dem Gerät. ",
+    strongC: "Gemma 4 E2B",
+    p3b: " als lokales Sprachmodell, auf Windows über llama.cpp mit Vulkan, auf Android via MediaPipe LiteRT. Daten verlassen das Tablet nie — keine Cloud, keine Telemetrie, keine Trainings-Rückflüsse.",
+    specs: [
+      { label: "Start-RAM",    value: "≥ 6 GB" },
+      { label: "Modell-Größe", value: "4 GB" },
+      { label: "Cloud",        value: "Keine" },
+      { label: "Status",       value: "Pilotbetrieb" },
+    ],
+    visualAlt: "KIPP Screenshot (Platzhalter)",
+  },
+  en: {
+    label: "Flagship · v1.0.0 · April 2026",
+    headA: "Validation before reality orientation.",
+    headB: "Always.",
+    meta: { plattform: "Platform", plattformVal: "Windows · Android", modell: "Model", modellVal: "Gemma 4 E2B, local", sprachen: "Languages", sprachenVal: "15" },
+    p1: `KIPP accompanies people living with dementia — and only them. Not a general-purpose AI, not a chatbot. The device says: "I'm here. You're safe. Tell me." And then it listens.`,
+    p2a: "The theoretical foundation is invisible but precise: ",
+    strongA: "Naomi Feil's Validation",
+    p2b: ` shapes how feelings are met — they're always true, even when facts no longer are. The `,
+    strongB: "Retrogenesis model by Barry Reisberg",
+    p2c: " provides the seven phases and determines word counts per sentence, question types, pause lengths.",
+    quote: "Feelings are always true — even when facts no longer are.",
+    cite: "— Core rule, KIPP prompt architecture",
+    p3a: "Technically, KIPP runs fully on device. ",
+    strongC: "Gemma 4 E2B",
+    p3b: " as local language model, on Windows via llama.cpp with Vulkan, on Android via MediaPipe LiteRT. Data never leaves the tablet — no cloud, no telemetry, no training feedback.",
+    specs: [
+      { label: "Min RAM",  value: "≥ 6 GB" },
+      { label: "Model size", value: "4 GB" },
+      { label: "Cloud",     value: "None" },
+      { label: "Status",    value: "Pilot" },
+    ],
+    visualAlt: "KIPP screenshot (placeholder)",
+  },
+}[lang];
+---
+
+<section class="case" id="kipp" aria-labelledby="kipp-head">
+  <div class="container case-inner">
+    <div class="case-grid">
+      <div>
+        <p class="case-label">{t.label}</p>
+        <h2 id="kipp-head">{t.headA} <em>{t.headB}</em></h2>
+
+        <p class="case-meta">
+          <b>{t.meta.plattform}</b> {t.meta.plattformVal} &nbsp;·&nbsp;
+          <b>{t.meta.modell}</b> {t.meta.modellVal} &nbsp;·&nbsp;
+          <b>{t.meta.sprachen}</b> {t.meta.sprachenVal}
+        </p>
+
+        <div class="case-prose">
+          <p>{t.p1}</p>
+          <p>{t.p2a}<strong>{t.strongA}</strong>{t.p2b}<strong>{t.strongB}</strong>{t.p2c}</p>
+          <blockquote class="pullquote">
+            {t.quote}
+            <cite>{t.cite}</cite>
+          </blockquote>
+          <p>{t.p3a}<strong>{t.strongC}</strong>{t.p3b}</p>
+        </div>
+
+        <div class="case-specs" role="list">
+          {t.specs.map(s => (
+            <div class="spec" role="listitem">
+              <div class="label">{s.label}</div>
+              <div class="value">{s.value}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <figure class="case-visual">
+        <img
+          src="/projects/kipp/02.png"
+          alt="KIPP Call-Screen im Dark-Theme mit leuchtendem Avatar"
+          loading="lazy"
+          decoding="async"
+          width="1600"
+          height="1000"
+        />
+      </figure>
+    </div>
+  </div>
+</section>

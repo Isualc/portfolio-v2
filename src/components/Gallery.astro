@@ -1,0 +1,175 @@
+---
+interface ImageItem {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+interface Props {
+  images: ImageItem[];
+  title: string;
+  lang?: "de" | "en";
+}
+const { images, title, lang = "de" } = Astro.props;
+
+const labels = {
+  de: { close: "Schließen", prev: "Vorheriges Bild", next: "Nächstes Bild", zoom: "Vergrößern", image: "Bild", of: "von" },
+  en: { close: "Close",     prev: "Previous image", next: "Next image", zoom: "Zoom",      image: "Image", of: "of" },
+}[lang];
+---
+
+<section class="gallery-section" aria-labelledby="gallery-head">
+  <h3 id="gallery-head" class="gallery-head">Galerie</h3>
+  <div class="gallery-grid" role="list">
+    {images.map((img, i) => (
+      <figure class="gallery-item" role="listitem">
+        <button
+          type="button"
+          class="gallery-trigger"
+          data-gallery-index={i}
+          aria-label={`${labels.zoom}: ${img.alt}`}
+        >
+          <img src={img.src} alt={img.alt} loading="lazy" decoding="async" />
+        </button>
+        {img.caption && <figcaption>{img.caption}</figcaption>}
+      </figure>
+    ))}
+  </div>
+
+  <!-- Lightbox -->
+  <div
+    class="lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label={`${labels.image}-Lightbox: ${title}`}
+    hidden
+  >
+    <button class="lb-close" type="button" aria-label={labels.close}>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+        <path d="M6 6l12 12M18 6l-12 12"/>
+      </svg>
+    </button>
+    <button class="lb-nav lb-prev" type="button" aria-label={labels.prev}>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+        <path d="M15 6l-6 6 6 6"/>
+      </svg>
+    </button>
+    <button class="lb-nav lb-next" type="button" aria-label={labels.next}>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+        <path d="M9 6l6 6-6 6"/>
+      </svg>
+    </button>
+    <figure class="lb-fig">
+      <img alt="" />
+      <figcaption>
+        <span class="lb-caption"></span>
+        <span class="lb-count" aria-live="polite"></span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<script is:inline define:vars={{ galleryImages: images, galleryLabels: labels, galleryTitle: title }}>
+  (function () {
+    const section = document.currentScript.previousElementSibling;
+    if (!section) return;
+    const lightbox = section.querySelector(".lightbox");
+    if (!lightbox) return;
+
+    const lbImg      = lightbox.querySelector("img");
+    const lbCaption  = lightbox.querySelector(".lb-caption");
+    const lbCount    = lightbox.querySelector(".lb-count");
+    const btnClose   = lightbox.querySelector(".lb-close");
+    const btnPrev    = lightbox.querySelector(".lb-prev");
+    const btnNext    = lightbox.querySelector(".lb-next");
+    const triggers   = section.querySelectorAll(".gallery-trigger");
+
+    // Inline SVG placeholder (greift wenn echte Screenshots fehlen)
+    function placeholder(alt, i) {
+      const safe = (s) => String(s).replace(/[<>&"']/g, (c) => ({"<":"&lt;",">":"&gt;","&":"&amp;","\"":"&quot;","'":"&#39;"}[c]));
+      const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'>
+<defs>
+  <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
+    <stop offset='0%' stop-color='#FFFFFF'/>
+    <stop offset='100%' stop-color='#F3EFE6'/>
+  </linearGradient>
+  <radialGradient id='r' cx='50%' cy='40%' r='60%'>
+    <stop offset='0%' stop-color='#0E5E54' stop-opacity='.18'/>
+    <stop offset='100%' stop-color='#0E5E54' stop-opacity='0'/>
+  </radialGradient>
+</defs>
+<rect width='800' height='600' fill='url(#g)'/>
+<rect width='800' height='600' fill='url(#r)'/>
+<text x='400' y='250' text-anchor='middle' font-family='Fraunces,Georgia,serif' font-size='64' font-weight='500' fill='#0F1A22'>${safe(galleryTitle)}</text>
+<text x='400' y='300' text-anchor='middle' font-family='IBM Plex Mono,monospace' font-size='13' fill='#6B7A88' letter-spacing='2'>SCREENSHOT · PLATZHALTER</text>
+<text x='400' y='355' text-anchor='middle' font-family='Inter,sans-serif' font-size='18' fill='#384653'>${safe(alt)}</text>
+<circle cx='400' cy='400' r='4' fill='#0E5E54'/>
+</svg>`;
+      return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+    }
+
+    // Attach fallback to all gallery thumbs
+    section.querySelectorAll(".gallery-trigger img").forEach((img, i) => {
+      img.addEventListener("error", function onErr() {
+        img.removeEventListener("error", onErr);
+        img.src = placeholder(img.alt, i);
+      });
+    });
+
+    let current = 0;
+    let lastFocused = null;
+
+    function render(i) {
+      const img = galleryImages[i];
+      if (!img) return;
+      current = i;
+      // Try real src; if it fails, swap to placeholder
+      lbImg.onerror = function onErr() {
+        lbImg.onerror = null;
+        lbImg.src = placeholder(img.alt, i);
+      };
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lbCaption.textContent = img.caption || img.alt;
+      lbCount.textContent = ` · ${i + 1} ${galleryLabels.of} ${galleryImages.length}`;
+    }
+
+    function open(i) {
+      lastFocused = document.activeElement;
+      render(i);
+      lightbox.hidden = false;
+      document.body.style.overflow = "hidden";
+      btnClose.focus();
+    }
+
+    function close() {
+      lightbox.hidden = true;
+      document.body.style.overflow = "";
+      if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+    }
+
+    function prev() { render((current - 1 + galleryImages.length) % galleryImages.length); }
+    function next() { render((current + 1) % galleryImages.length); }
+
+    triggers.forEach(t => {
+      t.addEventListener("click", () => {
+        const i = parseInt(t.getAttribute("data-gallery-index") || "0", 10);
+        open(i);
+      });
+    });
+
+    btnClose.addEventListener("click", close);
+    btnPrev.addEventListener("click", prev);
+    btnNext.addEventListener("click", next);
+
+    lightbox.addEventListener("click", e => {
+      if (e.target === lightbox) close();
+    });
+
+    document.addEventListener("keydown", e => {
+      if (lightbox.hidden) return;
+      if (e.key === "Escape") close();
+      if (e.key === "ArrowLeft") prev();
+      if (e.key === "ArrowRight") next();
+    });
+  })();
+</script>

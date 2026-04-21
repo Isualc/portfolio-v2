@@ -1,0 +1,44 @@
+---
+interface Props {
+  lang?: "de" | "en";
+}
+const { lang = "de" } = Astro.props;
+
+const labels = {
+  de: { ansatz: "Ansatz", projekte: "Projekte", ueber: "Über mich", kontakt: "Kontakt", cta: "Gespräch" },
+  en: { ansatz: "Approach", projekte: "Projects", ueber: "About",    kontakt: "Contact", cta: "Talk" },
+};
+const l = labels[lang];
+
+// Basis-URL je Sprache — alle Anker-Links zeigen absolut auf die Startseite,
+// damit sie auch von /projekte/<slug>/ aus funktionieren.
+const base = lang === "de" ? "/" : "/en/";
+---
+
+<header class="nav" role="banner">
+  <div class="container nav-inner">
+    <a href={base} class="brand" aria-label="Claus Hierzer – Startseite">
+      <span class="logo" aria-hidden="true"></span>
+      <span class="brand-text">
+        <span class="t">Claus Hierzer</span>
+        <span class="s">Portfolio · Steiermark</span>
+      </span>
+    </a>
+
+    <nav class="primary-nav" aria-label="Hauptnavigation">
+      <a href={`${base}#prinzipien`}>{l.ansatz}</a>
+      <a href="/projekte/kipp/">KIPP</a>
+      <a href={`${base}#projekte`}>{l.projekte}</a>
+      <a href={`${base}#ueber`}>{l.ueber}</a>
+      <a href={`${base}#kontakt`}>{l.kontakt}</a>
+    </nav>
+
+    <div class="nav-end">
+      <div class="lang-toggle" role="group" aria-label="Sprache">
+        <a href="/"     class={lang === "de" ? "current" : ""} aria-current={lang === "de" ? "page" : undefined}>DE</a>
+        <a href="/en/"  class={lang === "en" ? "current" : ""} aria-current={lang === "en" ? "page" : undefined}>EN</a>
+      </div>
+      <a href={`${base}#kontakt`} class="btn btn-primary btn-nav">{l.cta}</a>
+    </div>
+  </div>
+</header>

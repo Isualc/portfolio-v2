@@ -1,0 +1,302 @@
+---
+interface Props { lang?: "de" | "en"; }
+const { lang = "de" } = Astro.props;
+
+const t = {
+  de: {
+    kicker: "Kontakt",
+    headA: "Schreib mir.",
+    headB: "Kurz reicht.",
+    intro: "Ob Pflegeeinrichtung, Recruiter, Forschungspartner oder Jemand aus Neugier — kurz reicht.",
+    form: {
+      name: "Name",
+      email: "E-Mail",
+      subject: "Betreff",
+      message: "Nachricht",
+      submit: "Nachricht senden",
+      sending: "Öffne Mail-Client …",
+      ok: "Mail-Client geöffnet. Bitte die Nachricht dort abschicken.",
+      ph_name: "Ihr Name",
+      ph_email: "name@beispiel.at",
+      ph_subject: "Worum geht’s?",
+      ph_message: "Ein paar Sätze reichen.",
+      optional: "optional",
+      err_required: "Pflichtfeld.",
+      err_email:    "Bitte eine gültige E-Mail-Adresse angeben.",
+      err_short:    "Mindestens 10 Zeichen.",
+    },
+    altLabel: "Was Sie erwartet",
+    alt: [
+      { lbl: "Antwortzeit", val: "Meist innerhalb eines Werktags." },
+      { lbl: "Datenschutz", val: "Ihre Nachricht wird ausschließlich für die Antwort verwendet. Keine Weitergabe, keine Newsletter." },
+      { lbl: "Sprache",     val: "Deutsch oder Englisch — beides ist ok." },
+    ],
+    note: "Formular bevorzugt, damit Ihre Anfrage strukturiert ankommt.",
+    defaultSubject: "Nachricht vom Portfolio",
+  },
+  en: {
+    kicker: "Contact",
+    headA: "Drop me a line.",
+    headB: "Short is fine.",
+    intro: "Care facility, recruiter, research partner or just curious — short is fine.",
+    form: {
+      name: "Name",
+      email: "Email",
+      subject: "Subject",
+      message: "Message",
+      submit: "Send message",
+      sending: "Opening mail client …",
+      ok: "Mail client opened. Please send the message from there.",
+      ph_name: "Your name",
+      ph_email: "name@example.com",
+      ph_subject: "What’s it about?",
+      ph_message: "A few sentences will do.",
+      optional: "optional",
+      err_required: "Required field.",
+      err_email:    "Please enter a valid email address.",
+      err_short:    "At least 10 characters.",
+    },
+    altLabel: "What to expect",
+    alt: [
+      { lbl: "Response time", val: "Usually within one business day." },
+      { lbl: "Privacy",       val: "Your message is used only to reply. No forwarding, no newsletter." },
+      { lbl: "Language",      val: "German or English — both are fine." },
+    ],
+    note: "Form preferred so your request arrives structured.",
+    defaultSubject: "Message from portfolio",
+  },
+}[lang];
+---
+
+<section class="contact" id="kontakt" aria-labelledby="kontakt-head">
+  <div class="container contact-layout">
+    <div class="contact-head">
+      <p class="k" style="font-family: var(--font-mono); font-size: .74rem; color: var(--primary); letter-spacing: .1em; text-transform: uppercase; margin: 0 0 var(--s-3);">{t.kicker}</p>
+      <h2 id="kontakt-head">{t.headA} <em>{t.headB}</em></h2>
+      <p class="contact-intro">{t.intro}</p>
+    </div>
+
+    <form
+      class="contact-form"
+      data-default-subject={t.defaultSubject}
+      data-lang={lang}
+      novalidate
+      aria-label={t.kicker}
+    >
+      <div class="field-row">
+        <div class="field">
+          <label for="cf-name">
+            <span>{t.form.name}</span>
+            <span class="req" aria-hidden="true">*</span>
+          </label>
+          <input
+            id="cf-name"
+            name="name"
+            type="text"
+            required
+            autocomplete="name"
+            placeholder={t.form.ph_name}
+            aria-describedby="cf-name-err"
+          />
+          <p class="err" id="cf-name-err" role="alert" hidden></p>
+        </div>
+
+        <div class="field">
+          <label for="cf-email">
+            <span>{t.form.email}</span>
+            <span class="req" aria-hidden="true">*</span>
+          </label>
+          <input
+            id="cf-email"
+            name="email"
+            type="email"
+            required
+            autocomplete="email"
+            placeholder={t.form.ph_email}
+            aria-describedby="cf-email-err"
+          />
+          <p class="err" id="cf-email-err" role="alert" hidden></p>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="cf-subject">
+          <span>{t.form.subject}</span>
+          <span class="opt">({t.form.optional})</span>
+        </label>
+        <input
+          id="cf-subject"
+          name="subject"
+          type="text"
+          autocomplete="off"
+          placeholder={t.form.ph_subject}
+        />
+      </div>
+
+      <div class="field">
+        <label for="cf-message">
+          <span>{t.form.message}</span>
+          <span class="req" aria-hidden="true">*</span>
+        </label>
+        <textarea
+          id="cf-message"
+          name="message"
+          required
+          rows="5"
+          minlength="10"
+          placeholder={t.form.ph_message}
+          aria-describedby="cf-message-err"
+        ></textarea>
+        <p class="err" id="cf-message-err" role="alert" hidden></p>
+      </div>
+
+      <!-- Honeypot: hidden field for bots; real users leave empty -->
+      <div class="hp" aria-hidden="true">
+        <label for="cf-website">Website (bitte leer lassen)</label>
+        <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div class="form-foot">
+        <button type="submit" class="btn btn-primary">
+          <span class="btn-label">{t.form.submit}</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </button>
+        <p class="form-status" role="status" aria-live="polite" hidden></p>
+      </div>
+    </form>
+
+    <aside class="contact-alt" aria-label={t.altLabel}>
+      <p class="alt-label">{t.altLabel}</p>
+      <ul class="alt-list">
+        {t.alt.map(line => (
+          <li>
+            <span class="lbl">{line.lbl}</span>
+            <span class="alt-val">{line.val}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="contact-note">{t.note}</p>
+    </aside>
+  </div>
+</section>
+
+<script>
+  /**
+   * Contact form handler (mailto-based for static hosting).
+   * To upgrade to a form service later (Formspree / Web3Forms / Vercel Fn):
+   *   - replace the `openMailto(...)` call with a `fetch(ENDPOINT, { method: 'POST', body })`
+   *   - keep the validation + honeypot logic
+   */
+  type Lang = "de" | "en";
+
+  const FIELD_ERRORS: Record<Lang, { required: string; email: string; short: string }> = {
+    de: {
+      required: "Pflichtfeld.",
+      email:    "Bitte eine gültige E-Mail-Adresse angeben.",
+      short:    "Mindestens 10 Zeichen.",
+    },
+    en: {
+      required: "Required field.",
+      email:    "Please enter a valid email address.",
+      short:    "At least 10 characters.",
+    },
+  };
+
+  const STATUS_TEXT: Record<Lang, { sending: string; ok: string }> = {
+    de: { sending: "Öffne Mail-Client …", ok: "Mail-Client geöffnet. Bitte die Nachricht dort abschicken." },
+    en: { sending: "Opening mail client …", ok: "Mail client opened. Please send the message from there." },
+  };
+
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  function setError(form: HTMLFormElement, name: string, msg: string | null) {
+    const input = form.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="${name}"]`);
+    const err   = form.querySelector<HTMLElement>(`#cf-${name}-err`);
+    if (!input || !err) return;
+    if (msg) {
+      err.textContent = msg;
+      err.hidden = false;
+      input.setAttribute("aria-invalid", "true");
+      input.classList.add("is-invalid");
+    } else {
+      err.textContent = "";
+      err.hidden = true;
+      input.removeAttribute("aria-invalid");
+      input.classList.remove("is-invalid");
+    }
+  }
+
+  function validate(form: HTMLFormElement, lang: Lang): boolean {
+    const e = FIELD_ERRORS[lang];
+    const data = new FormData(form);
+    let ok = true;
+
+    const name = (data.get("name") || "").toString().trim();
+    if (!name) { setError(form, "name", e.required); ok = false; }
+    else setError(form, "name", null);
+
+    const email = (data.get("email") || "").toString().trim();
+    if (!email) { setError(form, "email", e.required); ok = false; }
+    else if (!EMAIL_RE.test(email)) { setError(form, "email", e.email); ok = false; }
+    else setError(form, "email", null);
+
+    const msg = (data.get("message") || "").toString().trim();
+    if (!msg) { setError(form, "message", e.required); ok = false; }
+    else if (msg.length < 10) { setError(form, "message", e.short); ok = false; }
+    else setError(form, "message", null);
+
+    return ok;
+  }
+
+  function openMailto(form: HTMLFormElement) {
+    const data = new FormData(form);
+    const name    = (data.get("name") || "").toString().trim();
+    const email   = (data.get("email") || "").toString().trim();
+    const subject = (data.get("subject") || "").toString().trim() || form.dataset.defaultSubject || "Nachricht";
+    const message = (data.get("message") || "").toString().trim();
+
+    // Recipient address obfuscated to slow down naive scrapers.
+    // NOT cryptographic — for real hiding, switch to Formspree/Web3Forms.
+    const recipient = atob("Y2xhdXNfaGllcnplckBnbXguYXQ=");
+
+    const body = `${message}\n\n—\n${name}\n${email}`;
+    const href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = href;
+  }
+
+  document.querySelectorAll<HTMLFormElement>(".contact-form").forEach(form => {
+    const lang = (form.dataset.lang as Lang) || "de";
+    const status = form.querySelector<HTMLElement>(".form-status");
+
+    // Live-clear errors on input
+    form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("input, textarea").forEach(el => {
+      el.addEventListener("input", () => {
+        const n = el.getAttribute("name");
+        if (n) setError(form, n, null);
+      });
+    });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      // Honeypot: real users don't fill this
+      const honeypot = form.querySelector<HTMLInputElement>('input[name="website"]');
+      if (honeypot && honeypot.value.trim() !== "") return;
+
+      if (!validate(form, lang)) return;
+
+      if (status) {
+        status.textContent = STATUS_TEXT[lang].sending;
+        status.hidden = false;
+      }
+
+      openMailto(form);
+
+      setTimeout(() => {
+        if (status) status.textContent = STATUS_TEXT[lang].ok;
+      }, 600);
+    });
+  });
+</script>

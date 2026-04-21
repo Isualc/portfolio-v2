@@ -1,0 +1,32 @@
+---
+interface Props { lang?: "de" | "en"; }
+const { lang = "de" } = Astro.props;
+
+const stats = {
+  de: [
+    { n: "15",      l: "Jahre in der Pflege" },
+    { n: "8",       l: "Jahre Demenzpflege" },
+    { n: "~1 Mio",  l: "Zeilen Code" },
+    { n: "6",       l: "Projekte im Portfolio" },
+  ],
+  en: [
+    { n: "15",      l: "Years in nursing" },
+    { n: "8",       l: "Years in dementia care" },
+    { n: "~1 M",    l: "Lines of code" },
+    { n: "6",       l: "Portfolio projects" },
+  ],
+}[lang];
+---
+
+<section class="stats-strip" aria-label={lang === "de" ? "Kennzahlen" : "Key numbers"}>
+  <div class="container">
+    <dl class="stats-grid">
+      {stats.map(s => (
+        <div class="stat">
+          <dt class="stat-n">{s.n}</dt>
+          <dd class="stat-l">{s.l}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
