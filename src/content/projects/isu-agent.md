@@ -7,7 +7,7 @@ version: "v2.46"
 status: "Aktiv"
 platforms: ["Windows", "Android"]
 tech: ["Flutter", "Gemma 4 E2B", "llama.cpp", "MediaPipe", "Obsidian Vault"]
-description: "Multimodaler Offline-KI-Agent (Flutter). 7 Screens: Chat, Voice-Call, 360°-Vision, Live-Translator P2P, Obsidian-Vault-Memory."
+description: "Der persönliche KI-Agent mit sieben Gesichtern — Chat, Sprach-Call, 360°-Kamera-Vision, Peer-to-Peer-Übersetzer, Obsidian-Memory, elf Themes. Offline wenn gewünscht, Cloud wenn es nützt."
 highlights:
   - "7 aktive Screens — Chat, Call, Translator, Vision, Memory, Settings"
   - "Hybrid-Inferenz: Gemma offline + optional OpenAI/Gemini/Claude"

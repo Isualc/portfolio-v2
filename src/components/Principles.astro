@@ -4,27 +4,27 @@ const { lang = "de" } = Astro.props;
 
 const t = {
   de: {
-    kicker: "Wie ich arbeite",
-    headA: "Vier Dinge, die mir",
-    headB: "wichtig sind.",
-    sub: "Ich messe jede Entscheidung in Code und Produkt an diesen vier Punkten. Wenn etwas sie bricht, baue ich es nicht.",
+    kicker: "Haltung",
+    headA: "Vier Zusagen, nach denen ich",
+    headB: "baue und nicht baue.",
+    sub: "Jede Entscheidung in Code und Produkt muss diese vier Punkte bestehen. Bricht eine davon, geht das Feature nicht in den Build.",
     p: [
-      { n: "I.",  h: "Menschlichkeit vor Technik",     t: `Validation nach Naomi Feil. Keine Realitätsorientierung, keine „W-Fragen" in späten Phasen. Gefühle werden ernst genommen — auch wenn Fakten nicht mehr stimmen.` },
-      { n: "II.", h: "Daten bleiben vor Ort",          t: `100 % Offline-Inferenz auf Edge-Hardware. Kein Upload, keine Server, kein Lock-in. DSGVO-Konformität entsteht durch Architektur, nicht durch Zusatz-Klauseln.` },
-      { n: "III.",h: "Leise Technik",                  t: `KIPP spricht ruhig, mit Pausen, ohne Emojis, ohne Markdown. Die Software tritt zurück — der Mensch ist die Hauptfigur.` },
-      { n: "IV.", h: "Eigene Erfahrung als Fundament", t: `Was ich baue, habe ich entweder selbst gebraucht oder bei jemandem gesehen, der es gebraucht hat. Das ist die einzige Rechtfertigung, die ich für ein Feature akzeptiere.` },
+      { n: "I.",  h: "Menschlichkeit vor Technik",     t: `Software soll niemanden korrigieren, der sich nicht mehr korrigieren kann. Gefühle zählen — auch wenn die Fakten nicht mehr stimmen. Das gilt für Demenzbegleitung, das gilt für die Interaktion mit jedem Nutzer.` },
+      { n: "II.", h: "Daten bleiben vor Ort",          t: `Default ist Offline-Inferenz auf Edge-Hardware. Kein Upload, keine Server, kein Lock-in. DSGVO-Konformität entsteht durch Architektur, nicht durch Zusatz-Klauseln.` },
+      { n: "III.",h: "Leise Technik",                  t: `Meine Anwendungen sprechen, wenn sie gefragt werden, und schweigen sonst. Keine Emojis, keine Gamification, keine künstliche Freundlichkeit — die Software tritt zurück, der Mensch bleibt die Hauptfigur.` },
+      { n: "IV.", h: "Praxis als Fundament",           t: `Was ich baue, habe ich selbst gebraucht oder bei jemandem gesehen, der es gebraucht hat. Das ist die einzige Rechtfertigung, die ich für ein Feature akzeptiere — kein „nice to have", kein „könnte cool sein".` },
     ],
   },
   en: {
-    kicker: "How I work",
-    headA: "Four things that",
-    headB: "matter to me.",
-    sub: "I measure every decision in code and product against these four points. If something breaks them, I don't ship it.",
+    kicker: "Stance",
+    headA: "Four commitments — what I",
+    headB: "will and won't build.",
+    sub: "Every decision in code and product must pass these four. If one breaks, the feature doesn't ship.",
     p: [
-      { n: "I.",  h: "Humanity before tech",           t: `Validation by Naomi Feil. No reality orientation, no "W-questions" in later phases. Feelings are taken seriously — even when the facts no longer hold.` },
-      { n: "II.", h: "Data stays on-device",           t: `100 % offline inference on edge hardware. No upload, no server, no lock-in. GDPR compliance through architecture, not clauses.` },
-      { n: "III.",h: "Quiet technology",               t: `KIPP speaks calmly, with pauses, no emojis, no markdown. The software steps back — the human is the lead.` },
-      { n: "IV.", h: "Lived experience as foundation", t: `What I build I either needed myself or saw someone else need. That's the only justification I accept for a feature.` },
+      { n: "I.",  h: "Humanity before tech",           t: `Software should not correct someone who can no longer correct themselves. Feelings matter — even when the facts no longer do. That applies to dementia care, and to every interaction with any user.` },
+      { n: "II.", h: "Data stays on-device",           t: `Default is offline inference on edge hardware. No upload, no server, no lock-in. GDPR compliance through architecture, not clauses.` },
+      { n: "III.",h: "Quiet technology",               t: `My apps speak when asked, and stay silent otherwise. No emojis, no gamification, no manufactured friendliness — the software steps back, the human remains the lead.` },
+      { n: "IV.", h: "Practice as foundation",         t: `What I build I needed myself or saw someone else need. That's the only justification I accept for a feature — no "nice to have", no "might be cool".` },
     ],
   },
 }[lang];

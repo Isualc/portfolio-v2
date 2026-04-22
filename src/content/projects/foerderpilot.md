@@ -7,7 +7,7 @@ version: "v0.2.0"
 status: "Aktiv"
 platforms: ["Windows"]
 tech: ["Flutter", "Dart", "Claude Code CLI", "Playwright", "Oracle APEX", "ASP.NET"]
-description: "Windows-App für österreichische Förderanträge. Halluzinationsfreier Katalog, 5-Schritt-Wizard, Portal-Automatisierung für FFG eCall und SFG APEX."
+description: "Desktop-Assistent für österreichische Förderanträge. Wählt nur aus einem geprüften Katalog — keine erfundenen Calls — und füllt FFG-, SFG- und aws-Portalformulare automatisch aus. Die Einreichung bleibt immer beim Nutzer."
 highlights:
   - "Fördersuche aus kuratiertem JSON-Katalog (FFG, SFG, aws, EU)"
   - "5-Schritt-Antrags-Wizard"

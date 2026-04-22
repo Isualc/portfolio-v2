@@ -7,7 +7,7 @@ version: "v2.2"
 status: "Private Beta"
 platforms: ["Android"]
 tech: ["Flutter", "Dart", "On-Device ML"]
-description: "Android-Begleiter bei sozialen Situationen. Gedacht für neurodivergente Nutzer. Private Beta seit Dezember 2025."
+description: "Diskrete Unterstützung in sozialen Situationen — für neurodivergente Nutzer entwickelt, mit ihnen getestet. Home-Screen-Widget, komplett lokal. Seit Dezember 2025 in privater Beta."
 highlights:
   - "Kontext-Hilfen für soziale Situationen"
   - "Kein Cloud-Upload — alles lokal"

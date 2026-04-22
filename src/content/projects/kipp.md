@@ -7,7 +7,7 @@ version: "v1.0.0"
 status: "Pilotbetrieb"
 platforms: ["Windows", "Android"]
 tech: ["Flutter", "Dart", "Gemma 4 E2B", "llama.cpp", "MediaPipe LiteRT"]
-description: "Offline-KI-Begleiter für Menschen mit Demenz. Validation nach Naomi Feil, Retrogenese nach Reisberg. Windows & Android, 100 % on-device."
+description: "Ein ruhiger Begleiter für Menschen mit Demenz, der nie korrigiert. Phasen-angepasste Sprache nach Reisberg, Peer-to-Peer-Übersetzung für Angehörige, Anwesenheits- und Sturzerkennung. Vollständig offline auf Windows und Android."
 highlights:
   - "Validation nach Naomi Feil"
   - "Retrogenese-Modell (Reisberg GDS/FAST 1–7)"

@@ -7,7 +7,7 @@ version: "v2.13.0"
 status: "Aktiv"
 platforms: ["Windows", "macOS", "Linux"]
 tech: ["Flutter", "Node.js Backend", "OpenClaw", "Whisper", "WireGuard", "Cloudflare Tunnel", "ElevenLabs"]
-description: "Flutter-Desktop-Anwendung, die ein komplettes Betriebssystem simuliert und eine umfangreiche KI-Agent-Plattform integriert. Multi-Modell-Chat, KI-Videoanrufe, Code-IDEs, Bildgenerierung, KI-Radio — über 40 Apps."
+description: "Ein KI-Arbeitsplatz als eigenständige Oberfläche. Über vierzig integrierte Apps für Chat, Video-Call, Code, Bild-, Audio- und Medienproduktion. Self-hosted auf dem eigenen Server, Zugriff via VPN oder Cloudflare-Tunnel."
 highlights:
   - "Desktop-Shell mit Taskbar, Fenster-Management, Themes, Wallpaper"
   - "Multi-KI-Chat über OpenClaw (Claude, GPT, Gemini, Mistral, Qwen)"

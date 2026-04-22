@@ -7,7 +7,7 @@ version: "v0.1.0"
 status: "Aktiv"
 platforms: ["Windows"]
 tech: ["Flutter", "Dart", "Claude Code CLI", "Playwright", "PDF + DOCX-Export"]
-description: "Flutter-Desktop-App für Bewerbungen. Harvard-Style CV (PDF + DOCX), Anschreiben, Multi-Portal-Jobsuche, Portal-Autofill und Tracking."
+description: "Bewerbung als Arbeitsprozess. Harvard-Style-Lebenslauf aus Fragebogen oder Upload, passgenaue Anschreiben, Multi-Portal-Jobsuche und eine klare Status-Pipeline für alle laufenden Bewerbungen."
 highlights:
   - "Harvard-Style CV aus Fragebogen ODER bestehendem CV-Upload"
   - 'Auf-Harvard-Style-umschreiben — Action + Kontext + Ergebnis'
